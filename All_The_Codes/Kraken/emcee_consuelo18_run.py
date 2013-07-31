@@ -26,12 +26,18 @@ def lnprob(p):
 	if not 10<=logM1 < 16:
 		return -np.inf
       	if not 0 < gamma <= 3:
+		return -np.inf
+	if not 0 < fgal < 10:
+		return -np.inf
+	if not 0 < log M0 < 100:
+		return -np.inf
+	if not 0 < siglogM < 10:
 		return -np.inf 
 	value =_chi2_fof.chi2_fof(lum_sample,*p)
 	return -0.5*value
 
 
-resume=1
+resume=0
 
 status_file="status_file_consuelo18.out"
 pickle_file="status_file_consuelo18.pkl"

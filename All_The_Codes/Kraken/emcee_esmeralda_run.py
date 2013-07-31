@@ -27,11 +27,13 @@ def lnprob(p):
 		return -np.inf
       	if not 0 < gamma <= 3:
 		return -np.inf 
+	if not 0 < fgal <= 10:
+		return -np.inf
 	value =_chi2_fof.chi2_fof(lum_sample,*p)
 	return -0.5*value
 
 
-resume=1
+resume=0
 
 status_file="status_file_esmeralda20.out"
 pickle_file="status_file_esmeralda20.pkl"
