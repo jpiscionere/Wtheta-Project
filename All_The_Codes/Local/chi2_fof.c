@@ -123,7 +123,10 @@ double chi2_fof(int lum_sample,int bender,double box_choose,double siglogM,doubl
                 Mstar=2.49E12;
                 max_redshift=0.165;
                 rhogal=0.0012;
-         
+            	snprintf(dpp_char,MAXLEN,"dpp");    
+               
+              
+             
 
         }else{ 
                 fprintf(stderr,"Incorrect Lum Sample! Exiting......\n");
@@ -140,8 +143,12 @@ double chi2_fof(int lum_sample,int bender,double box_choose,double siglogM,doubl
 	if(bender==1){
 		snprintf(stomp_path,MAXLEN,"/home/piscioja/astrostomp/stomp_bender/examples/stomp_galaxy_autocorrelation");
 		snprintf(halo_directory,MAXLEN,"/data0/LasDamas/%s/%d",sample_prefix,box);
-		snprintf(bgc_file,MAXLEN,"%s/fof_b0p2/%s_%d_z%s_fof_b0p2.0000.bgc",halo_directory,sample_prefix,box,ztag);
-        	snprintf(fff_output,MAXLEN,"/data2/jap/Emcee_test/fff/halobias_fof_nfw_%s_fff",file_tag);	
+		if(lum_sample != 21)
+			snprintf(bgc_file,MAXLEN,"%s/fof_b0p2/%s_%d_z%s_fof_b0p2.0000.bgc",halo_directory,sample_prefix,box,ztag);
+        	else
+			snprintf(bgc_file,MAXLEN,"%s/%s_%d_z%s_fof_b0p2.0000.bgc",halo_directory,sample_prefix,box,ztag);
+			
+		snprintf(fff_output,MAXLEN,"/data2/jap/Emcee_test/fff/halobias_fof_nfw_%s_fff",file_tag);	
 		snprintf(galaxy_file,MAXLEN,"/data2/jap/Emcee_test/fff/halobis_fof_nfw_%s_galaxies",file_tag); 
 			
 			
@@ -320,9 +327,9 @@ double chi2_fof(int lum_sample,int bender,double box_choose,double siglogM,doubl
 	int flag=0;
 	while(fscanf(fp4,"%d %lf %lf %lf",&itrash,&trash,&theory_wtheta[count],&trash)!=EOF)
         {
-		fprintf(stderr,"%e %e\n",theory_wtheta[count],RR[count]);
-		theory_wtheta[count] = theory_wtheta[count]/RR[count] - 1.0;	 	
-		
+
+	
+		theory_wtheta[count] = theory_wtheta[count]/RR[count] - 1.0;	 		
 		
 		count++;
         }
