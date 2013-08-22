@@ -7,21 +7,26 @@ from datetime import datetime
 
 def lnprob(p):
 	lum_sample=20
-	box, siglogM, logM0, logM1, alpha, gamma, fgal = p
-	if not 0<= box < 9:
-		return -np.inf
-	if not 0<= siglogM <= 2:
-		return -np.inf
-	if not 0 < alpha < 2:
-		return -np.inf
-	if not 10<=logM1 < 16:
-		return -np.inf
-	if not 8 <= logM0 <= logM1:
-		return -np.inf
+        machine=socket.gethostname()
+        if(machine=="bender"):
+                bender=1
+        else:   
+                bender=0
+        box, siglogM, logM0, logM1, alpha, gamma, fgal = p
+        if not 0<= box < 9:
+                return -np.inf
+        if not 0<= siglogM <= 2:
+                return -np.inf
+        if not 0 < alpha < 2:
+                return -np.inf
+        if not 10<=logM1 < 16:
+                return -np.inf
+        if not 8 <= logM0 <= logM1:
+                return -np.inf
 
-       
-	value =_chi2_fof.chi2_fof(lum_sample,*p)
-	return -0.5*value
+
+        value =_chi2_fof.chi2_fof(lum_sample,bender,*p)
+        return -0.5*value
 
 ndim=7
 
