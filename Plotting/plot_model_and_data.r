@@ -1,0 +1,20 @@
+library("MASS")
+library("ggplot2")
+library("gridExtra")
+library("Hmisc")
+library('magicaxis')
+library("foreign")
+library("gplots")
+source("../Box_test/stat-ellipse.R")
+library('gridExtra')
+
+data=read.table("/home/piscioja/Clustering/WthetaPaper/Data/Wtheta/Wtheta_vollim_Mr21_fib0.100rand.overlap.filter")
+ wtheta_data=data.frame(data)
+plot(V2~V1,data=wtheta_data,log="xy",axes=FALSE,type="p",col="red",ylim=c(0.1,100),xlab=expression(theta),ylab=expression(omega(theta)),main="Carmen Kraken Fits")
+magaxis(log='xy')
+box()
+errbar(wtheta_data$V1,wtheta_data$V2,wtheta_data$V2+wtheta_data$V3,wtheta_data$V2-wtheta_data$V3,log="xy",add=TRUE,col="red")
+data_files<-list.files("/home/piscioja/Clustering/WthetaPaper/Scripts",pattern="fgal_gamma.kraken.10xrand",full.names=T)
+for(i in 1:length(data_files)){a=read.table(data_files[i]);model=data.frame(a);lines(V2~V1,data=model,type="l",col=colors()[170 + i],lwd=3)}
+data_files<-list.files("/home/piscioja/Clustering/WthetaPaper/Scripts",pattern="g2.3890.fof.lss_geometry.wtheta",full.names=T)
+for(i in 1:length(data_files)){a=read.table(data_files[i]);model=data.frame(a);lines(V3~V2,data=model,type="l",col=colors()[155 + i],lwd=3)}
