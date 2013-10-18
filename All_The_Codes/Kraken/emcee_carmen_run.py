@@ -17,36 +17,36 @@ import os
 comm=MPI.COMM_WORLD
 
 def lnprob(p):
-	lum_sample=20
+	lum_sample=21
 	box,siglogM,logM0, logM1, alpha, gamma, fgal = p
-	if not 0<= box < 9:
+	if not 0<= box < 10:
 		return -np.inf
 	if not 0 < alpha < 2:
 		return -np.inf
 	if not 10<=logM1 < 16:
 		return -np.inf
       	if not 0 < gamma <= 3:
-		return -np.inf 
+		return -np.inf
 	if not 0 < fgal <= 2:
 		return -np.inf
-        if not 8 < logM0 < 16:
+ 	if not 8 < logM0 < 16:
                 return -np.inf
         if not 0 < siglogM < 1:
-                return -np.inf
+                return -np.inf 
 	value =_chi2_fof.chi2_fof(lum_sample,*p)
 	return -0.5*value
 
 
 resume=1
 
-status_file="status_file_esmeralda20.out"
-pickle_file="status_file_esmeralda20.pkl"
+status_file="status_file_carmen.out"
+pickle_file="status_file_carmen.pkl"
 ndim=7
 nwalkers=500
-nburn_in=7
+nburn_in=5
 box=np.array([np.random.randint(0,9) for col in range(nwalkers)])
 box=box.reshape(nwalkers,1)
-start_positions=np.array([0.02,9.81, 13.0605679001 ,  1.0846263627 ,  1.62330725248 ,  0.2202])
+start_positions=np.array([0.71194502,9.337148775,13.940323156,1.437455104,1.785,0.34])
 pos=[ start_positions * (1 + 0.01 * np.random.randn(len(start_positions)))  for col in range(nwalkers)]
 p0=np.append(box,pos,axis=1)
 
@@ -73,14 +73,14 @@ if resume == 0:
 
 
 else:
-
+        
 	try:
-	        pkl_file = open(pickle_file, 'rb')
+		pkl_file = open(pickle_file, 'rb')
         	pos = pickle.load(pkl_file)
         	prob = pickle.load(pkl_file)
         	rstate = pickle.load(pkl_file)
         	pkl_file.close()
-        
+
 	except:
 		pool.close()
 		exit

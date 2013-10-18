@@ -27,17 +27,17 @@ def lnprob(p):
 		return -np.inf
       	if not 0 < gamma <= 3:
 		return -np.inf
-	if not 0 < fgal < 10:
+	if not 0 < fgal < 2:
 		return -np.inf
-	if not 0 < log M0 < 100:
+	if not 5 < logM0 < 16:
 		return -np.inf
-	if not 0 < siglogM < 10:
+	if not 0 < siglogM < 1:
 		return -np.inf 
 	value =_chi2_fof.chi2_fof(lum_sample,*p)
 	return -0.5*value
 
 
-resume=0
+resume=1
 
 status_file="status_file_consuelo18.out"
 pickle_file="status_file_consuelo18.pkl"
@@ -73,18 +73,24 @@ if resume == 0:
 
 
 else:
-        pkl_file = open(pickle_file, 'rb')
-        pos = pickle.load(pkl_file)
-        prob = pickle.load(pkl_file)
-        rstate = pickle.load(pkl_file)
-        pkl_file.close()
-        if len(prob) != nwalkers:
+        
+	try:
+		pkl_file = open(pickle_file, 'rb')
+        	pos = pickle.load(pkl_file)
+        	prob = pickle.load(pkl_file)
+        	rstate = pickle.load(pkl_file)
+        	pkl_file.close()
+
+	except:
+		pool.close()
+		exit
+	if len(prob) != nwalkers:
                 print("ERROR: Nwalkers from pickle file does not agree with Nwalkers in script")
                	sys.exit(0) 
 
         f=open(status_file,"a")
         f.write("## Resuming: the calculation....{}\n".format(datetime.time(datetime.now())))
-f.close()
+	f.close()
 
 sampler.reset()
 iter=0
@@ -95,7 +101,8 @@ for pos, prob, rstate in sampler.sample(pos,prob,rstate,iterations=10000,storech
     	prob_array=prob.reshape(nwalkers,1)
     	array=np.append(pos_matrix,prob_array,axis=1)
 
-
+	execstring="cp -p {0:s} {0:s}.bak".format(pickle_file)
+	ret=call(execstring,shell=True)
 	pkl_file = open(pickle_file, 'wb')
         pickle.dump(pos, pkl_file,-1)
         pickle.dump(prob, pkl_file,-1)
